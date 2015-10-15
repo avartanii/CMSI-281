@@ -201,6 +201,7 @@ public class NumberList implements java.util.Collection {
                         newArray[i] = this.arr[i + 1];
                     }
                 }
+                this.arr = newArray;
             }
             return found;
         } catch (IllegalArgumentException e) {
@@ -213,8 +214,20 @@ public class NumberList implements java.util.Collection {
     /** Removes all of this collection's elements that are also contained 
     in the specified collection. */
     public boolean removeAll ( java.util.Collection c ) {
-        /* REPLACE THE NEXT STATEMENT WITH YOUR CODE */
-        throw new UnsupportedOperationException();
+        try {
+            if (!(c instanceof NumberList)) {
+                throw new IllegalArgumentException();
+            }
+            NumberList cNL = (NumberList) c;
+            for (int i = 0; i < cNL.sizeIncludingDuplicates(); i++) {
+                while (this.contains(Array.getLong(cNL.toArray(), i))) {
+                    this.remove(cNL);
+                }
+            }
+            return true;
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException();
+        }
     }
 
 
