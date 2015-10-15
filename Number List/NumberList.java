@@ -1,3 +1,5 @@
+import java.lang.reflect.Array;
+
 public class NumberList implements java.util.Collection {
 
     public long[] arr;
@@ -25,19 +27,27 @@ public class NumberList implements java.util.Collection {
     
     /** Increases by one the number of instances of the given element in this collection. */
     public boolean add (Object obj) {
-        long addend = Long.parseLong(obj.toString());
-        if (this.count < this.arr.length) {
-            this.arr[count] = addend;
-            count += 1;
-        } else {
-            long[] newArr = new long[this.arr.length * 2];
-            for (int i = 0; i < this.arr.length; i++) {
-                newArr[i] = this.arr[i];
+        try {
+            if (!(obj instanceof Long)) {
+                throw new IllegalArgumentException();
             }
-            newArr[this.arr.length] = addend;
+            long addend = Long.parseLong(obj.toString());
+            long[] sum = new long[0];
+            if (this.count < this.arr.length) {
+                this.arr[count] = addend;
+            } else {
+                sum = new long[this.arr.length * 2];
+                for (int i = 0; i < this.arr.length; i++) {
+                    sum[i] = this.arr[i];
+                }
+                sum[this.arr.length] = addend;
+            }
+            this.arr = sum;
+            this.count += 1;
+            return true;
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException();
         }
-        //TODO
-        return true;
     }
     
 
@@ -47,67 +57,122 @@ public class NumberList implements java.util.Collection {
             if (!(c instanceof NumberList)) {
                 throw new IllegalArgumentException();
             }
+            this.count = 0;
             int newLength = ((this.arr.length > c.size()) ? this.arr.length * 2 : c.size() * 2);
             long[] sum = new long[newLength];
-            for (int i = 0; i < newLength; i++) {
-
+            for (int i = 0; i < this.arr.length; i++) {
+                sum[i] = this.arr[i];
+                count += 1;
             }
+            for (int j = this.arr.length; j < sum.length; j++) {
+                sum[j] = Array.getLong(c.toArray(), j - this.arr.length);
+                count =+ 1;
+            }
+            this.arr = sum;
+            return true;
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException();
         }
-        //TODO
-        return true;
     }
 
 
     /** Removes all of the elements from this collection. */
     public void clear () {
-        /* REPLACE THE NEXT STATEMENT WITH YOUR CODE */
-        throw new UnsupportedOperationException();
+        this.arr = new long[0];
+        this.count = 0;
     }
 
 
     /** Returns true iff this number list contains at least one instance of the specified element. */
     public boolean contains ( Object obj ) {
+        try {
+            if (!(obj instanceof Long)) {
+                throw new IllegalArgumentException();
+            }
+            long comparison = Long.parseLong(obj.toString());
+            for (int i = 0; i < this.arr.length; i++) {
+                if (this.arr[i] == comparison) {
+                    return true;
+                }
+            }
+            return false;
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+
+
+    /** Returns true iff this number list contains at least one instance of each element 
+    in the specified list. Multiple copies of some element in the argument do not
+    require multiple copies in this number list. */
+    public boolean containsAll ( java.util.Collection c ) {
+        try {
+            if (!(c instanceof NumberList)) {
+                throw new IllegalArgumentException();
+            }
+            boolean found;
+            for (int i = 0; i < c.size(); i++) {
+                found = false;
+                for (int j = 0; j < this.arr.length; j++) {
+                    found = (Array.getLong(c.toArray(), i) == this.arr[j]) ? true : false;
+                }
+                if (!found) {
+                    return false;
+                }
+            }
+            return true;
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+
+
+
+    /**?????????????????????????????????????????????????????????????????
+    ????????????????????????????????????????????????????????????????????
+    ????????????????????????????????????????????????????????????????????
+    ????????????????????????????????????????????????????????????????????
+    ??????????????????????????????????????????????????????????????????*/
+    /** Compares the specified object with this collection for equality. */
+    public boolean equals ( Object obj ) {
+        try {
+            if (!(obj instanceof NumberList)) {
+                throw new IllegalArgumentException();
+            }
+            boolean found;
+            for (int i = 0; i < obj.size(); i++) {
+                found = false;
+                for (int j = 0; j < this.arr.length; j++) {
+                    found = (Array.getLong(obj.toArray(), i) == this.arr[j]) ? true : false;
+                }
+                if (!found) {
+                    return false;
+                }
+            }
+            return true;
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+
+
+
+    /** Returns the hashcode value for this collection. */
+    public int hashCode () {
         /* REPLACE THE NEXT STATEMENT WITH YOUR CODE */
         throw new UnsupportedOperationException();
     }
 
 
 
-    /** Returns true iff this number list contains at least one instance of each element 
-        in the specified list. Multiple copies of some element in the argument do not
-        require multiple copies in this number list. */
-        public boolean containsAll ( java.util.Collection c ) {
-            /* REPLACE THE NEXT STATEMENT WITH YOUR CODE */
-            throw new UnsupportedOperationException();
-        }
-
-
-
-
-        /** Compares the specified object with this collection for equality. */
-        public boolean equals ( Object obj ) {
-            /* REPLACE THE NEXT STATEMENT WITH YOUR CODE */
-            throw new UnsupportedOperationException();
-        }
-
-
-
-
-        /** Returns the hashcode value for this collection. */
-        public int hashCode () {
-            /* REPLACE THE NEXT STATEMENT WITH YOUR CODE */
-            throw new UnsupportedOperationException();
-        }
-
-
-
-        /** Returns true if this collection contains no elements. */
-        public boolean isEmpty () {
-            /* REPLACE THE NEXT STATEMENT WITH YOUR CODE */
-            throw new UnsupportedOperationException();
-        }
+    /** Returns true if this collection contains no elements. */
+    public boolean isEmpty () {
+        /* REPLACE THE NEXT STATEMENT WITH YOUR CODE */
+        throw new UnsupportedOperationException();
+    }
 
 
 
@@ -142,7 +207,7 @@ public class NumberList implements java.util.Collection {
 	/** Retains only the elements in this collection that are contained in the specified collection. 
 		 In other words, removes from this collection all of its elements that are not contained in the 
 		 specified collection. */
-         public boolean retainAll ( java.util.Collection c ) {
+        public boolean retainAll ( java.util.Collection c ) {
           throw new UnsupportedOperationException();
       }
 
