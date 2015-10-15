@@ -25,76 +25,94 @@ public class NumberList implements java.util.Collection {
     
     /** Increases by one the number of instances of the given element in this collection. */
     public boolean add (Object obj) {
+        long addend = Long.parseLong(obj.toString());
         if (this.count < this.arr.length) {
+            this.arr[count] = addend;
+            count += 1;
+        } else {
             long[] newArr = new long[this.arr.length * 2];
             for (int i = 0; i < this.arr.length; i++) {
                 newArr[i] = this.arr[i];
             }
-            newArr[this.arr.length] = obj;
+            newArr[this.arr.length] = addend;
         }
+        //TODO
+        return true;
     }
     
 
     /** Adds all of the elements of the given number list to this one. */
-    public boolean addAll ( java.util.Collection c  ) {
-        /* REPLACE THE NEXT STATEMENT WITH YOUR CODE */
-        throw new UnsupportedOperationException();
+    public boolean addAll (java.util.Collection c) {
+        try {
+            if (!(c instanceof NumberList)) {
+                throw new IllegalArgumentException();
+            }
+            int newLength = ((this.arr.length > c.size()) ? this.arr.length * 2 : c.size() * 2);
+            long[] sum = new long[newLength];
+            for (int i = 0; i < newLength; i++) {
+
+            }
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException();
+        }
+        //TODO
+        return true;
     }
- 
+
 
     /** Removes all of the elements from this collection. */
     public void clear () {
         /* REPLACE THE NEXT STATEMENT WITH YOUR CODE */
         throw new UnsupportedOperationException();
     }
- 
+
 
     /** Returns true iff this number list contains at least one instance of the specified element. */
     public boolean contains ( Object obj ) {
         /* REPLACE THE NEXT STATEMENT WITH YOUR CODE */
         throw new UnsupportedOperationException();
     }
- 
+
 
 
     /** Returns true iff this number list contains at least one instance of each element 
         in the specified list. Multiple copies of some element in the argument do not
         require multiple copies in this number list. */
-    public boolean containsAll ( java.util.Collection c ) {
-        /* REPLACE THE NEXT STATEMENT WITH YOUR CODE */
-        throw new UnsupportedOperationException();
-    }
- 
- 
-
-
-    /** Compares the specified object with this collection for equality. */
-    public boolean equals ( Object obj ) {
-        /* REPLACE THE NEXT STATEMENT WITH YOUR CODE */
-        throw new UnsupportedOperationException();
-    }
- 
+        public boolean containsAll ( java.util.Collection c ) {
+            /* REPLACE THE NEXT STATEMENT WITH YOUR CODE */
+            throw new UnsupportedOperationException();
+        }
 
 
 
-    /** Returns the hashcode value for this collection. */
-    public int hashCode () {
-        /* REPLACE THE NEXT STATEMENT WITH YOUR CODE */
-        throw new UnsupportedOperationException();
-    }
+
+        /** Compares the specified object with this collection for equality. */
+        public boolean equals ( Object obj ) {
+            /* REPLACE THE NEXT STATEMENT WITH YOUR CODE */
+            throw new UnsupportedOperationException();
+        }
 
 
 
-    /** Returns true if this collection contains no elements. */
-    public boolean isEmpty () {
-        /* REPLACE THE NEXT STATEMENT WITH YOUR CODE */
-        throw new UnsupportedOperationException();
-    }
+
+        /** Returns the hashcode value for this collection. */
+        public int hashCode () {
+            /* REPLACE THE NEXT STATEMENT WITH YOUR CODE */
+            throw new UnsupportedOperationException();
+        }
+
+
+
+        /** Returns true if this collection contains no elements. */
+        public boolean isEmpty () {
+            /* REPLACE THE NEXT STATEMENT WITH YOUR CODE */
+            throw new UnsupportedOperationException();
+        }
 
 
 
     /** Returns an iterator over the elements in this collection. Replicated elements should
-        be "iterated over" just once. */
+    be "iterated over" just once. */
     public java.util.Iterator iterator () {
         /* REPLACE THE NEXT STATEMENT WITH YOUR CODE */
         throw new UnsupportedOperationException();
@@ -103,7 +121,7 @@ public class NumberList implements java.util.Collection {
 
 
     /** Removes a single instance of the specified element from 
-        this collection, if it is present. */
+    this collection, if it is present. */
     public boolean remove ( Object obj ) {
         /* REPLACE THE NEXT STATEMENT WITH YOUR CODE */
         throw new UnsupportedOperationException();
@@ -112,7 +130,7 @@ public class NumberList implements java.util.Collection {
 
 
     /** Removes all of this collection's elements that are also contained 
-        in the specified collection. */
+    in the specified collection. */
     public boolean removeAll ( java.util.Collection c ) {
         /* REPLACE THE NEXT STATEMENT WITH YOUR CODE */
         throw new UnsupportedOperationException();
@@ -124,13 +142,13 @@ public class NumberList implements java.util.Collection {
 	/** Retains only the elements in this collection that are contained in the specified collection. 
 		 In other words, removes from this collection all of its elements that are not contained in the 
 		 specified collection. */
-	public boolean retainAll ( java.util.Collection c ) {
-		throw new UnsupportedOperationException();
-	}
+         public boolean retainAll ( java.util.Collection c ) {
+          throw new UnsupportedOperationException();
+      }
 
 
-    /** Returns the number of elements in this number list, including duplicates. */
-    public int sizeIncludingDuplicates () {
+      /** Returns the number of elements in this number list, including duplicates. */
+      public int sizeIncludingDuplicates () {
         /* REPLACE THE NEXT STATEMENT WITH YOUR CODE */
         throw new UnsupportedOperationException();
     }
@@ -155,8 +173,7 @@ public class NumberList implements java.util.Collection {
 
     /** Returns the number of elements in this number list, not including duplicates. */
     public int size () {
-        /* REPLACE THE NEXT STATEMENT WITH YOUR CODE */
-        throw new UnsupportedOperationException();
+        return this.count;
     }
 
 
@@ -179,7 +196,7 @@ public class NumberList implements java.util.Collection {
 
     
     /** This so-called "static factory" returns a new number list comprised of the numbers in the specified array.
-        Note that the given array is long[], not Long[]. */
+    Note that the given array is long[], not Long[]. */
     public static NumberList fromArray ( long[] l ) {
         /* REPLACE THE NEXT STATEMENT WITH YOUR CODE */
         throw new UnsupportedOperationException();
