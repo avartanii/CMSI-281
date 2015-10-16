@@ -1,13 +1,14 @@
 import java.lang.reflect.Array;
+import java.util.Arrays;
 
 public class NumberList implements java.util.Collection {
 
-    public long[] arr;
+    public Long[] arr;
     public int count;
 
     /** Constructs an empty number list. */
     public NumberList(){
-        this.arr = new long[10];
+        this.arr = new Long[10];
         this.count = 0;
     }
 
@@ -15,14 +16,16 @@ public class NumberList implements java.util.Collection {
     /** Constructs a number list from an array of Longs. */
     public NumberList(Long[] l){
         int length = 10;
+        this.count = 0;
         for (int i = 0; l.length > length; i++) {
             length = 10 * (int) (Math.pow(2, i));
         }
-        this.arr = new long[length];
-        for (int i = 0; i < arr.length; i++) {
+        this.arr = new Long[length];
+        for (int i = 0; i < l.length; i++) {
             this.arr[i] = l[i];
+            this.count += 1;
         }
-        this.count = 0;
+        this.finalizeArray();
     }
     
     /** Increases by one the number of instances of the given element in this collection. */
@@ -31,19 +34,20 @@ public class NumberList implements java.util.Collection {
             if (!(obj instanceof Long)) {
                 throw new IllegalArgumentException();
             }
-            long addend = (long) obj; //Long.parseLong(obj.toString());
-            long[] sum = new long[0];
+            Long addend = (Long) obj; //Long.parseLong(obj.toString());
+            Long[] sum = new Long[0];
             if (this.count < this.arr.length) {
                 this.arr[count] = addend;
             } else {
-                sum = new long[this.arr.length * 2];
+                sum = new Long[this.arr.length * 2];
                 for (int i = 0; i < this.arr.length; i++) {
                     sum[i] = this.arr[i];
                 }
                 sum[this.arr.length] = addend;
+                this.arr = sum;
             }
-            this.arr = sum;
             this.count += 1;
+            //System.out.println("Array: " + Arrays.toString(this.arr));
             return true;
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException();
@@ -58,18 +62,9 @@ public class NumberList implements java.util.Collection {
                 throw new IllegalArgumentException();
             }
             NumberList cNL = (NumberList) c;
-            this.count = 0;
-            int newLength = ((this.arr.length > cNL.sizeIncludingDuplicates()) ? this.arr.length * 2 : cNL.sizeIncludingDuplicates() * 2);
-            long[] sum = new long[newLength];
-            for (int i = 0; i < this.arr.length; i++) {
-                sum[i] = this.arr[i];
-                count += 1;
+            for (int i = 0; i < cNL.sizeIncludingDuplicates(); i++) {
+                this.add(cNL.toArray()[i]);
             }
-            for (int j = this.arr.length; j < sum.length; j++) {
-                sum[j] = Array.getLong(c.toArray(), j - this.arr.length);
-                count =+ 1;
-            }
-            this.arr = sum;
             return true;
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException();
@@ -79,7 +74,7 @@ public class NumberList implements java.util.Collection {
 
     /** Removes all of the elements from this collection. */
     public void clear () {
-        this.arr = new long[0];
+        this.arr = new Long[0];
         this.count = 0;
     }
 
@@ -90,9 +85,9 @@ public class NumberList implements java.util.Collection {
             if (!(obj instanceof Long)) {
                 throw new IllegalArgumentException();
             }
-            long comparison = Long.parseLong(obj.toString());
-            for (int i = 0; i < this.arr.length; i++) {
-                if (this.arr[i] == comparison) {
+            Long comparison = (Long) obj;
+            for (int i = 0; i < this.sizeIncludingDuplicates(); i++) {
+                if (this.arr[i].equals(comparison)) {
                     return true;
                 }
             }
@@ -113,13 +108,8 @@ public class NumberList implements java.util.Collection {
                 throw new IllegalArgumentException();
             }
             NumberList cNL = (NumberList) c;
-            boolean found;
             for (int i = 0; i < cNL.sizeIncludingDuplicates(); i++) {
-                found = false;
-                for (int j = 0; j < this.arr.length; j++) {
-                    found = (Array.getLong(cNL.toArray(), i) == this.arr[j]) ? true : false;
-                }
-                if (!found) {
+                if (!this.contains(cNL.toArray()[i])) {
                     return false;
                 }
             }
@@ -139,11 +129,11 @@ public class NumberList implements java.util.Collection {
                 throw new IllegalArgumentException();
             }
             NumberList objNL = (NumberList) obj;
-            if (this.count != objNL.sizeIncludingDuplicates()) {
+            if (this.sizeIncludingDuplicates() != objNL.sizeIncludingDuplicates()) {
                 return false;
             }
-            for (int i = 0; i < this.arr.length; i++) {
-                if (this.arr[i] != Array.getLong(objNL.toArray(), i)) {
+            for (int i = 0; i < this.sizeIncludingDuplicates(); i++) {
+                if (!this.arr[i].equals(objNL.toArray()[i])) {
                     return false;
                 }
             }
@@ -187,12 +177,12 @@ public class NumberList implements java.util.Collection {
             if (!(obj instanceof Long)) {
                 throw new IllegalArgumentException();
             }
-            long objNL = (long) obj;
+            Long objNL = (Long) obj;
             boolean found = false;
             if (this.contains(objNL)) {
-                long[] newArray = new long[this.arr.length - 1];
+                Long[] newArray = new Long[this.sizeIncludingDuplicates() - 1];
                 for (int i = 0; i < newArray.length; i++) {
-                    if (this.arr[i] == objNL) {
+                    if (this.arr[i].equals(objNL) && !found) {
                         found = true;
                     }
                     if (!found) {
@@ -220,8 +210,8 @@ public class NumberList implements java.util.Collection {
             }
             NumberList cNL = (NumberList) c;
             for (int i = 0; i < cNL.sizeIncludingDuplicates(); i++) {
-                while (this.contains(Array.getLong(cNL.toArray(), i))) {
-                    this.remove(cNL);
+                while (this.contains(cNL.toArray()[i])) {
+                    this.remove(cNL.toArray()[i]);
                 }
             }
             return true;
@@ -237,27 +227,44 @@ public class NumberList implements java.util.Collection {
 	In other words, removes from this collection all of its elements that are not contained in the 
 	specified collection. */
     public boolean retainAll ( java.util.Collection c ) {
-        throw new UnsupportedOperationException();
+        try {
+            if (!(c instanceof NumberList)) {
+                throw new IllegalArgumentException();
+            }
+            NumberList cNL = (NumberList) c;
+            for (int i = 0; i < this.sizeIncludingDuplicates(); i++) {
+                if (!cNL.contains(this.arr[i])) {
+                    this.removeAll(new NumberList(new Long[]{this.arr[i]}));
+                }
+            }
+            return true;
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException();
+        }
     }
 
 
     /** Returns the number of elements in this number list, including duplicates. */
     public int sizeIncludingDuplicates () {
-        return this.count;
+        int counter = 0;
+        for (int i = 0; i < this.arr.length && this.arr[i] != null; i++) {
+            counter += 1;
+        }
+        return counter;
     }
 
 
 
     /** Returns a Long[] containing all of the elements in this collection, not including duplicates. */
     public Long[] toArray () {
-        /* REPLACE THE NEXT STATEMENT WITH YOUR CODE */
-        throw new UnsupportedOperationException();
+        return this.arr;
     }
 
 
 
     /** Not supported for this class. */
     public Object[] toArray ( Object[] obj ) {
+        /* REPLACE THE NEXT STATEMENT WITH YOUR CODE */
         throw new UnsupportedOperationException();
     }
 
@@ -266,8 +273,18 @@ public class NumberList implements java.util.Collection {
 
     /** Returns the number of elements in this number list, not including duplicates. */
     public int size () {
-        /* REPLACE THE NEXT STATEMENT WITH YOUR CODE */
-        throw new UnsupportedOperationException();
+        NumberList used = new NumberList();
+        for (int i = 0; i < this.sizeIncludingDuplicates(); i++) {
+            System.out.println("i: " + i);
+            System.out.println("Contains: " + used.contains(this.toArray()[i]));
+            if (!used.contains(this.toArray()[i])) {
+                System.out.println("In if");
+                used.add(this.toArray()[i]);
+                //System.out.println("Used: " + Arrays.toString(used.toArray()));
+            }
+        }
+        System.out.println("Used: " + Arrays.toString(used.toArray()));
+        return used.sizeIncludingDuplicates();
     }
 
 
@@ -275,8 +292,22 @@ public class NumberList implements java.util.Collection {
 
     /** Returns the number of instances of the given element in this number list. */
     public int count ( Object obj ) {
-        /* REPLACE THE NEXT STATEMENT WITH YOUR CODE */
-        throw new UnsupportedOperationException();
+        try {
+            if (!(obj instanceof Long)) {
+                throw new IllegalArgumentException();
+            }
+            Long objNL = (Long) obj;
+            if (!this.contains(objNL)) {
+                return 0;
+            }
+            int counter = 0;
+            for (int i = 0; i < this.sizeIncludingDuplicates(); i++) {
+                counter += (this.arr[i].equals(objNL)) ? 1 : 0;
+            }
+            return counter;
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException();
+        }
     }
 
 
@@ -284,8 +315,15 @@ public class NumberList implements java.util.Collection {
 
     /** This returns a stringy version of this number list. */
     public String toString () { // overrides Object.toString()
-        /* REPLACE THE NEXT STATEMENT WITH YOUR CODE */
-        throw new UnsupportedOperationException();
+        return Arrays.toString(this.arr);
+    }
+
+    public void finalizeArray() {
+        Long[] finalArray = new Long[this.count];
+        for (int i = 0; i < this.count; i++) {
+            finalArray[i] = this.arr[i];
+        }
+        this.arr = finalArray;
     }
 
 
@@ -294,15 +332,31 @@ public class NumberList implements java.util.Collection {
     /** This so-called "static factory" returns a new number list comprised of the numbers in the specified array.
     Note that the given array is long[], not Long[]. */
     public static NumberList fromArray ( long[] l ) {
-        /* REPLACE THE NEXT STATEMENT WITH YOUR CODE */
-        throw new UnsupportedOperationException();
+        NumberList numL = new NumberList();
+        for (int i = 0; i < l.length; i++) {
+            numL.add(new Long(l[i]));
+        }
+        return numL;
     }
 
     
     /** This main method is just a comprehensive test program for the class. */
     public static void main ( String[] args ) {
-        /* REPLACE THE NEXT STATEMENT WITH YOUR CODE */
-        throw new UnsupportedOperationException();
+        NumberList nL = new NumberList();
+        NumberList nL2 = new NumberList();
+        for (int i = 0; i < 23; i++) {
+            nL.add(new Long(i));
+            nL2.add(new Long(i));
+        }
+        for (int i = 0; i < 12; i += 2) {
+            nL2.add(new Long(i));
+        }
+        System.out.println("Before Add All: " + nL.toString());
+        nL.addAll(nL2);
+        System.out.println("After Add All: " + nL.toString());
+        
+        System.out.println("Size Including Duplicates: " + nL.sizeIncludingDuplicates());
+        System.out.println("Size: " + nL.size());
     }
     
 }
