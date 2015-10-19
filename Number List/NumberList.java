@@ -6,14 +6,16 @@ public class NumberList implements java.util.Collection {
     private Long[] arr;
     private int count;
 
-    /** Constructs an empty number list. */
+    /** Constructs an empty number list.
+    Asymptotic Performance Guarantee: (theta)(1) */
     public NumberList(){
         this.arr = new Long[10];
         this.count = 0;
     }
 
 
-    /** Constructs a number list from an array of Longs. */
+    /** Constructs a number list from an array of Longs.
+    Asymptotic Performance Guarantee: (theta)(n) */
     public NumberList(Long[] l){
         int length = 10;
         this.count = 0;
@@ -29,13 +31,14 @@ public class NumberList implements java.util.Collection {
         this.count = this.arr.length;
     }
     
-    /** Increases by one the number of instances of the given element in this collection. */
+    /** Increases by one the number of instances of the given element in this collection.
+    Asymptotic Performance Guarantee: (theta)(n) */
     public boolean add (Object obj) {
         try {
             if (!(obj instanceof Long)) {
                 throw new IllegalArgumentException();
             }
-            Long addend = (Long) obj; //Long.parseLong(obj.toString());
+            Long addend = (Long) obj;
             Long[] sum = new Long[0];
             if (this.count < this.arr.length) {
                 this.arr[count] = addend;
@@ -48,7 +51,6 @@ public class NumberList implements java.util.Collection {
                 this.arr = sum;
             }
             this.count += 1;
-            //System.out.println("Array: " + Arrays.toString(this.arr));
             return true;
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException();
@@ -56,7 +58,8 @@ public class NumberList implements java.util.Collection {
     }
     
 
-    /** Adds all of the elements of the given number list to this one. */
+    /** Adds all of the elements of the given number list to this one.
+    Asymptotic Performance Guarantee: (theta)(n^2) */
     public boolean addAll (java.util.Collection c) {
         try {
             if (!(c instanceof NumberList)) {
@@ -74,14 +77,16 @@ public class NumberList implements java.util.Collection {
     }
 
 
-    /** Removes all of the elements from this collection. */
+    /** Removes all of the elements from this collection.
+    Asymptotic Performance Guarantee: (theta)(1) */
     public void clear () {
         this.arr = new Long[0];
         this.count = 0;
     }
 
 
-    /** Returns true iff this number list contains at least one instance of the specified element. */
+    /** Returns true iff this number list contains at least one instance of the specified element.
+    Asymptotic Performance Guarantee: (theta)(n) */
     public boolean contains ( Object obj ) {
         try {
             if (!(obj instanceof Long)) {
@@ -103,7 +108,8 @@ public class NumberList implements java.util.Collection {
 
     /** Returns true iff this number list contains at least one instance of each element 
     in the specified list. Multiple copies of some element in the argument do not
-    require multiple copies in this number list. */
+    require multiple copies in this number list.
+    Asymptotic Performance Guarantee: (theta)(n) */
     public boolean containsAll ( java.util.Collection c ) {
         try {
             if (!(c instanceof NumberList)) {
@@ -124,7 +130,8 @@ public class NumberList implements java.util.Collection {
 
 
 
-    /** Compares the specified object with this collection for equality. */
+    /** Compares the specified object with this collection for equality.
+    Asymptotic Performance Guarantee: (theta)(n) */
     public boolean equals (Object obj) {
         try {
             if (!(obj instanceof NumberList)) {
@@ -156,7 +163,8 @@ public class NumberList implements java.util.Collection {
 
 
 
-    /** Returns true if this collection contains no elements. */
+    /** Returns true if this collection contains no elements.
+    Asymptotic Performance Guarantee: (theta)(1) */
     public boolean isEmpty () {
         return (this.count == 0);
     }
@@ -173,7 +181,8 @@ public class NumberList implements java.util.Collection {
 
 
     /** Removes a single instance of the specified element from 
-    this collection, if it is present. */
+    this collection, if it is present.
+    Asymptotic Performance Guarantee: (theta)(n) */
     public boolean remove ( Object obj ) {
         try {
             if (!(obj instanceof Long)) {
@@ -205,7 +214,8 @@ public class NumberList implements java.util.Collection {
 
 
     /** Removes all of this collection's elements that are also contained 
-    in the specified collection. */
+    in the specified collection.
+    Asymptotic Performance Guarantee: (theta)(n^2) */
     public boolean removeAll ( java.util.Collection c ) {
         try {
             if (!(c instanceof NumberList)) {
@@ -229,22 +239,17 @@ public class NumberList implements java.util.Collection {
 
 	/** Retains only the elements in this collection that are contained in the specified collection. 
 	In other words, removes from this collection all of its elements that are not contained in the 
-	specified collection. */
+	specified collection.
+    Asymptotic Performance Guarantee: (theta)(n^4) */
     public boolean retainAll ( java.util.Collection c ) {
         try {
             if (!(c instanceof NumberList)) {
                 throw new IllegalArgumentException();
             }
             NumberList cNL = (NumberList) c;
-            while (!this.equals(cNL)) {
-            for (int i = 0; i < this.sizeIncludingDuplicates(); i++) {
-                if (!cNL.contains(this.arr[i])) {
-                    while (this.contains(this.arr[i])) {
-                        this.remove(new Long(this.arr[i]));
-                    }
-                }
-            }
-        }
+            NumberList difference = new NumberList(this.toArray());
+            difference.removeAll(cNL);
+            this.removeAll(difference);
             this.finalizeArray();
             return true;
         } catch (IllegalArgumentException e) {
@@ -253,7 +258,8 @@ public class NumberList implements java.util.Collection {
     }
 
 
-    /** Returns the number of elements in this number list, including duplicates. */
+    /** Returns the number of elements in this number list, including duplicates.
+    Asymptotic Performance Guarantee: (theta)(n) */
     public int sizeIncludingDuplicates () {
         int counter = 0;
         for (int i = 0; i < this.arr.length && this.arr[i] != null; i++) {
@@ -264,7 +270,8 @@ public class NumberList implements java.util.Collection {
 
 
 
-    /** Returns a Long[] containing all of the elements in this collection, not including duplicates. */
+    /** Returns a Long[] containing all of the elements in this collection, not including duplicates.
+    Asymptotic Performance Guarantee: (theta)(1) */
     public Long[] toArray () {
         return this.arr;
     }
@@ -280,26 +287,23 @@ public class NumberList implements java.util.Collection {
 
 
 
-    /** Returns the number of elements in this number list, not including duplicates. */
+    /** Returns the number of elements in this number list, not including duplicates.
+    Asymptotic Performance Guarantee: (theta)(n^2) */
     public int size () {
         NumberList used = new NumberList();
         for (int i = 0; i < this.sizeIncludingDuplicates(); i++) {
-            System.out.println("i: " + i);
-            System.out.println("Contains: " + used.contains(this.toArray()[i]));
             if (!used.contains(this.toArray()[i])) {
-                System.out.println("In if");
                 used.add(this.toArray()[i]);
-                //System.out.println("Used: " + Arrays.toString(used.toArray()));
             }
         }
-        System.out.println("Used: " + Arrays.toString(used.toArray()));
         return used.sizeIncludingDuplicates();
     }
 
 
 
 
-    /** Returns the number of instances of the given element in this number list. */
+    /** Returns the number of instances of the given element in this number list.
+    Asymptotic Performance Guarantee: (theta)(n) */
     public int count ( Object obj ) {
         try {
             if (!(obj instanceof Long)) {
@@ -322,11 +326,16 @@ public class NumberList implements java.util.Collection {
 
 
 
-    /** This returns a stringy version of this number list. */
+    /** This returns a stringy version of this number list.
+    Asymptotic Performance Guarantee: (theta)(1) */
     public String toString () { // overrides Object.toString()
         return Arrays.toString(this.arr);
     }
 
+
+
+
+    /** Asymptotic Performance Guarantee: (theta)(n) */
     public void finalizeArray() {
         Long[] finalArray = new Long[this.sizeIncludingDuplicates()];
         for (int i = 0; i < this.sizeIncludingDuplicates(); i++) {
@@ -339,7 +348,8 @@ public class NumberList implements java.util.Collection {
 
 
     /** This so-called "static factory" returns a new number list comprised of the numbers in the specified array.
-    Note that the given array is long[], not Long[]. */
+    Note that the given array is long[], not Long[].
+    Asymptotic Performance Guarantee: (theta)(n) */
     public static NumberList fromArray ( long[] l ) {
         NumberList numL = new NumberList();
         for (int i = 0; i < l.length; i++) {
@@ -352,24 +362,7 @@ public class NumberList implements java.util.Collection {
     /** This main method is just a comprehensive test program for the class. */
     public static void main ( String[] args ) {
         NumberListTestHarness nLTH = new NumberListTestHarness();
-        nLTH.main(new String[0]);
-
-
-
-
-
-
-
-
-        NumberList nL = new NumberList(new Long[]{new Long(1), new Long(2), new Long(3), new Long(4), new Long(5)});
-
-        NumberList nL2 = new NumberList(new Long[]{new Long(1), new Long(2), new Long(3)});
-
-        System.out.println(nL.toString());
-
-        nL.retainAll(nL2);
-
-        System.out.println(nL.toString());        
+        nLTH.main(new String[0]);      
     }
     
 }

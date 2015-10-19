@@ -17,21 +17,17 @@ public class NumberListTestHarness {
 		}
 		*/
 
-		//test_Constructor();
-		//test_add();
-		//test_addAll();
-		//test_clear();
-		//test_contains();
-
-		//test_containsAll();
-
+		test_Constructor();
+		test_add();
+		test_addAll();
+		test_clear();
+		test_contains();
+		test_containsAll();
 		test_equals();
 		test_isEmpty();
 		test_remove();
 		test_removeAll();
 		test_retainAll();
-		/*
-		
 		test_sizeIncludingDuplicates();
 		test_toArray();
 		test_size();
@@ -39,7 +35,6 @@ public class NumberListTestHarness {
 		test_toString();
 		test_finalizeArray();
 		test_fromArray();
-		*/
 
 
 
@@ -97,7 +92,6 @@ public class NumberListTestHarness {
 		l2 = new Long[100000];
 
 		for (int i = 0; i < 500000; i++) {
-			System.out.println(i);
 			l1[i] = new Long(i);
 		}
 		
@@ -151,24 +145,19 @@ public class NumberListTestHarness {
 			displaySuccessIfTrue(false);
 		}
 
-		/*
-
 		l1 = new Long[500000];
 		l2 = new Long[100000];
 		l3 = new Long[400000];
 
 		for (int i = 0; i < 500000; i++) {
-			System.out.println(i);
 			l1[i] = new Long(i);
 		}
 
 		for (int i = 0; i < 100000; i++) {
-			System.out.println(i);
 			l2[i] = new Long(i);
 		}
 
 		for (int i = 0; i < 400000; i++) {
-			System.out.println(i);
 			l3[i] = new Long(i + 100000);
 		}
 
@@ -176,7 +165,7 @@ public class NumberListTestHarness {
 		nL2 = new NumberList(l2);
 		nL3 = new NumberList(l3);
 
-		nL2.addAll(nL3)
+		nL2.addAll(nL3);
 
 		try {
 			displaySuccessIfTrue(nL.equals(nL2));
@@ -184,7 +173,6 @@ public class NumberListTestHarness {
 			displaySuccessIfTrue(false);
 		}
 
-		*/
 	}
 
 	private static void test_clear() {
@@ -301,20 +289,20 @@ public class NumberListTestHarness {
 			displaySuccessIfTrue(false);
 		}
 
-		l1 = new Long[100000];
-		l2 = new Long[12345];
-		l3 = new Long[87655];
+		l1 = new Long[1000];
+		l2 = new Long[123];
+		l3 = new Long[877];
 
-		for (int i = 0; i < 100000; i++) {
+		for (int i = 0; i < 1000; i++) {
 			l1[i] = new Long(i);
 		}
 
-		for (int i = 0; i < 12345; i++) {
+		for (int i = 0; i < 123; i++) {
 			l2[i] = new Long(i);
 		}
 
-		for (int i = 0; i < 87655; i++) {
-			l3[i] = new Long(i + 12345);
+		for (int i = 0; i < 877; i++) {
+			l3[i] = new Long(i + 123);
 		}
 
 		nL = new NumberList(l1);
@@ -562,6 +550,16 @@ public class NumberListTestHarness {
 		} catch(Exception e) {
 			displaySuccessIfTrue(false);
 		}
+
+		nL4.addAll(nL3);
+
+		nL4.removeAll(nL3);
+
+		try {
+			displaySuccessIfTrue(nL4.equals(nL2));
+		} catch(Exception e) {
+			displaySuccessIfTrue(false);
+		}		
 	}
 
 	private static void test_retainAll() {
@@ -583,9 +581,6 @@ public class NumberListTestHarness {
 			l3[i] = new Long(i + 123);
 		}
 
-		System.out.println(Arrays.toString(l1));
-		System.out.println(Arrays.toString(l2));
-
 		NumberList nL = new NumberList(l1);
 		NumberList nL2 = new NumberList(l2);
 		NumberList nL3 = new NumberList(l3);
@@ -593,41 +588,265 @@ public class NumberListTestHarness {
 
 		nL.retainAll(nL2);
 
-		System.out.println(nL.toString());
-		System.out.println(nL2.toString());
-
 		try {
 			displaySuccessIfTrue(nL.equals(nL2));
 		} catch(Exception e) {
 			displaySuccessIfTrue(false);
-		}		
+		}
+
+		nL4.addAll(nL2);
+		NumberList nL5 = new NumberList(nL4.toArray());
+		nL2.addAll(nL3);
+		nL4.retainAll(nL2);
+
+		try {
+			displaySuccessIfTrue(nL4.equals(nL5));
+		} catch(Exception e) {
+			displaySuccessIfTrue(false);
+		}
 	}
 
 	private static void test_sizeIncludingDuplicates() {
 		System.out.println("Testing sizeIncludingDuplicates()...");
+
+		Long[] l1 = new Long[1000];
+
+		for (int i = 0; i < 1000; i++) {
+			l1[i] = new Long(5);
+		}
+
+		NumberList nL = new NumberList(l1);
+
+		try {
+			displaySuccessIfTrue(nL.sizeIncludingDuplicates() == 1000);
+		} catch(Exception e) {
+			displaySuccessIfTrue(false);
+		}
+
+		for (int i = 0; i < 1000; i++) {
+			l1[i] = new Long(i % 2);
+		}
+
+		nL = new NumberList(l1);
+
+		try {
+			displaySuccessIfTrue(nL.sizeIncludingDuplicates() == 1000);
+		} catch(Exception e) {
+			displaySuccessIfTrue(false);
+		}
+
+		for (int i = 0; i < 1000; i++) {
+			l1[i] = new Long(i % 5);
+		}
+
+		nL = new NumberList(l1);
+
+		try {
+			displaySuccessIfTrue(nL.sizeIncludingDuplicates() == 1000);
+		} catch(Exception e) {
+			displaySuccessIfTrue(false);
+		}
 	}
 
 	private static void test_toArray() {
 		System.out.println("Testing toArray()...");
+
+		Long[] l1 = new Long[1000];
+
+		for (int i = 0; i < 1000; i++) {
+			l1[i] = new Long(i);
+		}
+
+		NumberList nL = new NumberList(l1);
+
+		try {
+			displaySuccessIfTrue(Arrays.equals(nL.toArray(), l1));
+		} catch(Exception e) {
+			displaySuccessIfTrue(false);
+		}
+
+		for (int i = 0; i < 1000; i++) {
+			l1[i] = new Long(i % 2);
+		}
+
+		nL = new NumberList(l1);
+
+		try {
+			displaySuccessIfTrue(Arrays.equals(nL.toArray(), l1));
+		} catch(Exception e) {
+			displaySuccessIfTrue(false);
+		}
 	}
 
 	private static void test_size() {
 		System.out.println("Testing size()...");
+
+		Long[] l1 = new Long[1000];
+
+		for (int i = 0; i < 1000; i++) {
+			l1[i] = new Long(5);
+		}
+
+		NumberList nL = new NumberList(l1);
+
+		try {
+			displaySuccessIfTrue(nL.size() == 1);
+		} catch(Exception e) {
+			displaySuccessIfTrue(false);
+		}
+
+		for (int i = 0; i < 1000; i++) {
+			l1[i] = new Long(i % 2);
+		}
+
+		nL = new NumberList(l1);
+
+		try {
+			displaySuccessIfTrue(nL.size() == 2);
+		} catch(Exception e) {
+			displaySuccessIfTrue(false);
+		}
+
+		for (int i = 0; i < 1000; i++) {
+			l1[i] = (i % 5 == 0) ? new Long(i) : new Long(0);
+		}
+
+		nL = new NumberList(l1);
+
+		try {
+			displaySuccessIfTrue(nL.size() == 200);
+		} catch(Exception e) {
+			displaySuccessIfTrue(false);
+		}
 	}
 
 	private static void test_count() {
 		System.out.println("Testing count()...");
+
+		Long[] l1 = new Long[1000];
+
+		for (int i = 0; i < 1000; i++) {
+			l1[i] = (i % 5 == 0) ? new Long(i) : new Long(0);
+		}
+
+		NumberList nL = new NumberList(l1);
+
+		try {
+			displaySuccessIfTrue(nL.count(new Long(0)) == 801);
+		} catch(Exception e) {
+			displaySuccessIfTrue(false);
+		}
+
+		nL = new NumberList(l1);
+
+		try {
+			displaySuccessIfTrue(nL.count(new Long(0)) == 801);
+		} catch(Exception e) {
+			displaySuccessIfTrue(false);
+		}
 	}
 
 	private static void test_toString() {
 		System.out.println("Testing toString()...");
+
+		Long[] l1 = new Long[1000];
+
+		for (int i = 0; i < 1000; i++) {
+			l1[i] = (i % 5 == 0) ? new Long(i) : new Long(0);
+		}
+
+		NumberList nL = new NumberList(l1);
+
+		try {
+			displaySuccessIfTrue(nL.toString().equals(Arrays.toString(l1)));
+		} catch(Exception e) {
+			displaySuccessIfTrue(false);
+		}
+
+		nL = new NumberList();
+
+		try {
+			displaySuccessIfTrue(nL.toString().equals(Arrays.toString(new Long[]{null, null, null, null, null, null, null, null, null, null})));
+		} catch(Exception e) {
+			displaySuccessIfTrue(false);
+		}
 	}
 
 	private static void test_finalizeArray() {
 		System.out.println("Testing finalizeArray()...");
+
+		Long[] l1 = new Long[1000];
+		Long[] l2 = new Long[500];
+
+		for (int i = 0; i < 1000; i++) {
+			l1[i] = (i > 499) ? null : new Long(i);
+		}
+
+		for (int i = 0; i < 500; i++) {
+			l2[i] = new Long(i);
+		}
+
+		NumberList nL = new NumberList();
+		NumberList nL2 = new NumberList(l1);
+		NumberList nL3 = new NumberList(l2);
+		nL.finalizeArray();
+		nL2.finalizeArray();
+		nL3.finalizeArray();
+
+		try {
+			displaySuccessIfTrue(nL.toString().equals(Arrays.toString(new Long[0])));
+		} catch(Exception e) {
+			displaySuccessIfTrue(false);
+		}
+
+		try {
+			displaySuccessIfTrue(nL2.equals(nL3));
+		} catch(Exception e) {
+			displaySuccessIfTrue(false);
+		}
 	}
 
 	private static void test_fromArray() {
 		System.out.println("Testing fromArray()...");
+
+		Long[] l1a = new Long[1000];
+		Long[] l1b = new Long[500];
+
+		long[] l2a = new long[1000];
+		long[] l2b = new long[500];
+
+		for (int i = 0; i < 1000; i++) {
+			l1a[i] = new Long(i);
+		}
+
+		for (int i = 0; i < 500; i++) {
+			l1b[i] = new Long(i);
+		}
+
+		for (int i = 0; i < 1000; i++) {
+			l2a[i] = (long) (i);
+		}
+
+		for (int i = 0; i < 500; i++) {
+			l2b[i] = (long) (i);
+		}
+
+		NumberList nL1a = new NumberList(l1a);
+		NumberList nL1b = new NumberList(l1b);
+		NumberList nL2a = NumberList.fromArray(l2a);
+		NumberList nL2b = NumberList.fromArray(l2b);
+
+		try {
+			displaySuccessIfTrue(nL1a.equals(nL2a));
+		} catch(Exception e) {
+			displaySuccessIfTrue(false);
+		}
+
+		try {
+			displaySuccessIfTrue(nL1b.equals(nL2b));
+		} catch(Exception e) {
+			displaySuccessIfTrue(false);
+		}
+
 	}
 }
