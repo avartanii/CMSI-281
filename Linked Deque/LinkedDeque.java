@@ -96,8 +96,10 @@ public class LinkedDeque {
 		if (this.left == null && this.right == null) {
 			this.left = new Node(o);
 			this.right = this.left;
+			this.size += 1;
 		} else if (this.left == null && this.right != null) {
 			this.left = new Node(o);
+			this.size += 1;
 		} else {
 			this.left.createLeft(o);
 			this.left = this.left.getLeft();
@@ -109,8 +111,10 @@ public class LinkedDeque {
 		if (this.right == null && this.left == null) {
 			this.right = new Node(o);
 			this.left = this.right;
+			this.size += 1;
 		} else if (this.right == null && this.left != null) {
 			this.right = new Node(o);
+			this.size += 1;
 		} else {
 			this.right.createRight(o);
 			this.right = this.right.getRight();
