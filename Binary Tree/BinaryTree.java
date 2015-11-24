@@ -2,32 +2,44 @@ public class BinaryTree {
 
 	public class Node {
 
-		private Node right;
-		private Node left;
+		private Node leftSon;
+		private Node rightSon;
+		private Node father;
 		private Object obj;
 
 		public Node() {
 			this.obj = null;
-			this.right = null;
-			this.left = null;
+			this.leftSon = null;
+			this.rightSon = null;
+			this.father = null;
 		}
 
 		public Node(Object o) {
 			this.obj = o;
-			this.right = null;
-			this.left = null;
+			this.leftSon = null;
+			this.rightSon = null;
+			this.father = null;
 		}
 
-		public Node(Object o, Node r) {
+		public Node(Object o, Node l) {
 			this.obj = o;
-			this.right = r;
-			this.left = null;
+			this.leftSon = l;
+			this.rightSon = null;
+			this.father = null;
 		}
 
-		public Node(Object o, Node r, Node l) {
+		public Node(Object o, Node l, Node r) {
 			this.obj = o;
-			this.right = r;
-			this.left = l;
+			this.leftSon = l;
+			this.rightSon = r;
+			this.father = null;
+		}
+
+		public Node(Object o, Node l, Node r, Node f) {
+			this.obj = o;
+			this.leftSon = l;
+			this.rightSon = r;
+			this.father = f;
 		}
 
 		public Object getObj() {
@@ -42,36 +54,56 @@ public class BinaryTree {
 			return this.obj != null;
 		}
 
-		public void setRight(Node r) {
-			this.right = r;
+		public void setLeftSon(Node l) {
+			this.leftSon = l;
 		}
 
-		public void setLeft(Node l) {
-			this.left = l;
+		public void setRightSon(Node r) {
+			this.rightSon = r;
 		}
 
-		public void createRight(Object o) {
-			this.right = new Node(o, null, this);
+		public void setFather(Node f) {
+			this.father = f;
 		}
 
-		public void createLeft(Object o) {
-			this.left = new Node(o, this);
+		public void createLeftSon(Object o) {
+			this.leftSon = new Node(o, null, null, this);
 		}
 
-		public Node getRight() {
-			return this.right;
+		public void createRightSon(Object o) {
+			this.rightSon = new Node(o, null, null, this);
 		}
 
-		public Node getLeft() {
-			return this.left;
+		public void createFatherFromLeft(Object o) {
+			this.father = new Node(o, this, null, null);
 		}
 
-		public void removeRight() {
-			this.right = null;
+		public void createFatherFromRight(Object o) {
+			this.father = new Node(o, null, this, null);
 		}
 
-		public void removeLeft() {
-			this.left = null;
+		public Node getLeftSon() {
+			return this.leftSon;
+		}
+
+		public Node getRightSon() {
+			return this.rightSon;
+		}
+
+		public Node getFather() {
+			return this.father;
+		}
+
+		public void removeLeftSon() {
+			this.leftSon = null;
+		}
+
+		public void removeRightSon() {
+			this.rightSon = null;
+		}
+
+		public void removeFather() {
+			this.father = null;
 		}
 
 		public String toString() {
