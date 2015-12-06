@@ -1,5 +1,6 @@
 import java.util.Iterator;
 import java.util.Arrays;
+import java.util.Stack;
 
 public class BinaryTree implements Iterable {
 
@@ -129,7 +130,7 @@ public class BinaryTree implements Iterable {
 		}
 
 		public String toString() {
-			return ("Node" + this.obj.toString());
+			return ("Node " + this.obj.toString());
 		}
 
 		@Override
@@ -166,35 +167,33 @@ public class BinaryTree implements Iterable {
 	public class PreOrderIterator implements Iterator {
 
 		private BinaryTree bt;
-		private Node[] stack;
+		private Stack<Node> stack;
 		private Node cursor;
-		private int nextIndex;
+		private int counter;
 
 		public PreOrderIterator(BinaryTree binTree) {
 			this.bt = binTree;
-			this.stack = new Node[this.bt.size()];
+			this.stack = new Stack<Node>();
 			this.cursor = this.bt.getRoot();
-			this.nextIndex = 0;
+			this.counter = this.bt.size();
 		}
 
 		public boolean hasNext() {
-			return (this.cursor.hasLeftSon() || this.cursor.hasRightSon() || this.stack[0] != null);
+			return (this.cursor != null && (this.cursor.hasLeftSon() || this.cursor.hasRightSon() || !this.stack.isEmpty() || this.counter > 0));
 		}
 
 		public Object next() {
 			Object obj = this.cursor.getObj();
+			this.counter -= 1;
 			if (this.cursor.hasLeftSon() && this.cursor.hasRightSon()) {
-				this.stack[nextIndex] = this.cursor.getRightSon();
-				this.nextIndex += 1;
+				this.stack.push(this.cursor.getRightSon());
 				this.cursor = this.cursor.getLeftSon();
 			} else if (this.cursor.hasLeftSon()) {
 				this.cursor = this.cursor.getLeftSon();
 			} else if (this.cursor.hasRightSon()) {
 				this.cursor = this.cursor.getRightSon();
-			} else if (this.stack[0] != null) {
-				this.cursor = this.stack[nextIndex - 1];
-				this.stack[nextIndex - 1] = null;
-				this.nextIndex -= 1;
+			} else if (!this.stack.isEmpty()) {
+				this.cursor = this.stack.pop();
 			}
 			return obj;
 		}
@@ -202,7 +201,7 @@ public class BinaryTree implements Iterable {
 		public Object[] toArray() {
 			PreOrderIterator preOr = new PreOrderIterator(bt);
 			Object[] preOrder = new Object[this.bt.size()];
-			for (int i = 0; i < preOrder.length; i++) {
+			for (int i = 0; i < preOrder.length && this.cursor != null; i++) {
 				preOrder[i] = preOr.next();
 			}
 			return preOrder;
@@ -216,28 +215,27 @@ public class BinaryTree implements Iterable {
 	public class InOrderIterator implements Iterator {
 
 		private BinaryTree bt;
-		private Node[] stack;
+		private Stack<Node> stack;
 		private Node cursor;
-		private int nextIndex;
+		private int counter;
 		private boolean stackInitialized;
 
 		public InOrderIterator(BinaryTree binTree) {
 			this.bt = binTree;
-			this.stack = new Node[this.bt.size()];
+			this.stack = new Stack<Node>();
 			this.cursor = this.bt.getRoot();
-			this.nextIndex = 0;
+			this.counter = this.bt.size();
 			this.stackInitialized = false;
 		}
 
 		public boolean hasNext() {
-			return (this.cursor.hasLeftSon() || this.cursor.hasRightSon() || this.stack[0] != null);
+			return (this.cursor.hasLeftSon() || this.cursor.hasRightSon() || !this.stack.isEmpty() || this.counter > 0);
 		}
 
 		public void initializeStack() {
 			while (this.cursor.hasLeftSon()) {
-				this.stack[nextIndex] = this.cursor;
+				this.stack.push(this.cursor);
 				this.cursor = this.cursor.getLeftSon();
-				this.nextIndex += 1;
 			}
 			this.stackInitialized = true;
 		}
@@ -247,15 +245,14 @@ public class BinaryTree implements Iterable {
 				this.initializeStack();
 			}
 			Object obj = this.cursor.getObj();
+			this.counter -= 1;
 			if (this.cursor.hasRightSon() && this.cursor.getRightSon().hasLeftSon()) {
 				this.cursor = this.cursor.getRightSon();
 				this.stackInitialized = false;
 			} else if (this.cursor.hasRightSon()) {
 				this.cursor = this.cursor.getRightSon();
-			} else if (this.stack[0] != null) {
-				this.cursor = this.stack[nextIndex - 1];
-				this.stack[nextIndex - 1] = null;
-				this.nextIndex -= 1;
+			} else if (!this.stack.isEmpty()) {
+				this.cursor = this.stack.pop();
 			}
 			return obj;
 		}
@@ -277,35 +274,33 @@ public class BinaryTree implements Iterable {
 	private class NodePreOrderIterator implements Iterator {
 
 		private BinaryTree bt;
-		private Node[] stack;
+		private Stack<Node> stack;
 		private Node cursor;
-		private int nextIndex;
+		private int counter;
 
 		public NodePreOrderIterator(BinaryTree binTree) {
 			this.bt = binTree;
-			this.stack = new Node[this.bt.size()];
+			this.stack = new Stack<Node>();
 			this.cursor = this.bt.getRoot();
-			this.nextIndex = 0;
+			this.counter = this.bt.size();
 		}
 
 		public boolean hasNext() {
-			return (this.cursor.hasLeftSon() || this.cursor.hasRightSon() || this.stack[0] != null);
+			return (this.cursor.hasLeftSon() || this.cursor.hasRightSon() || !this.stack.isEmpty() || this.counter > 0);
 		}
 
 		public Node next() {
 			Node n = this.cursor;
+			this.counter -= 1;
 			if (this.cursor.hasLeftSon() && this.cursor.hasRightSon()) {
-				this.stack[nextIndex] = this.cursor.getRightSon();
-				this.nextIndex += 1;
+				this.stack.push(this.cursor.getRightSon());
 				this.cursor = this.cursor.getLeftSon();
 			} else if (this.cursor.hasLeftSon()) {
 				this.cursor = this.cursor.getLeftSon();
 			} else if (this.cursor.hasRightSon()) {
 				this.cursor = this.cursor.getRightSon();
-			} else if (this.stack[0] != null) {
-				this.cursor = this.stack[nextIndex - 1];
-				this.stack[nextIndex - 1] = null;
-				this.nextIndex -= 1;
+			} else if (!this.stack.isEmpty()) {
+				this.cursor = this.stack.pop();
 			}
 			return n;
 		}
@@ -327,28 +322,28 @@ public class BinaryTree implements Iterable {
 	private class NodeInOrderIterator implements Iterator {
 
 		private BinaryTree bt;
-		private Node[] stack;
+		private Stack<Node> stack;
 		private Node cursor;
 		private int nextIndex;
+		private int counter;
 		private boolean stackInitialized;
 
 		public NodeInOrderIterator(BinaryTree binTree) {
 			this.bt = binTree;
-			this.stack = new Node[this.bt.size()];
+			this.stack = new Stack<Node>();
 			this.cursor = this.bt.getRoot();
-			this.nextIndex = 0;
+			this.counter = this.bt.size();
 			this.stackInitialized = false;
 		}
 
 		public boolean hasNext() {
-			return (this.cursor.hasLeftSon() || this.cursor.hasRightSon() || this.stack[0] != null);
+			return (this.cursor.hasLeftSon() || this.cursor.hasRightSon() || !this.stack.isEmpty() || this.counter > 0);
 		}
 
 		public void initializeStack() {
 			while (this.cursor.hasLeftSon()) {
-				stack[nextIndex] = this.cursor;
+				this.stack.push(this.cursor);
 				this.cursor = this.cursor.getLeftSon();
-				nextIndex += 1;
 			}
 			this.stackInitialized = true;
 		}
@@ -358,15 +353,14 @@ public class BinaryTree implements Iterable {
 				this.initializeStack();
 			}
 			Node n = this.cursor;
+			this.counter -= 1;
 			if (this.cursor.hasRightSon() && this.cursor.getRightSon().hasLeftSon()) {
 				this.cursor = this.cursor.getRightSon();
 				this.stackInitialized = false;
 			} else if (this.cursor.hasRightSon()) {
 				this.cursor = this.cursor.getRightSon();
-			} else if (this.stack[0] != null) {
-				this.cursor = this.stack[nextIndex - 1];
-				this.stack[nextIndex - 1] = null;
-				this.nextIndex -= 1;
+			} else if (!this.stack.isEmpty()) {
+				this.cursor = this.stack.pop();
 			}
 			return n;
 		}
@@ -405,6 +399,10 @@ public class BinaryTree implements Iterable {
 	//Returns root node of binary tree
 	public Node getRoot() {
 		return this.root;
+	}
+
+	public Node getCursor() {
+		return this.cursor;
 	}
 
 	//Return true iff the tree contains an object equivalent to obj
@@ -466,6 +464,34 @@ public class BinaryTree implements Iterable {
 	//Returns tree size
 	public int size() {
 		return this.size;
+	}
+
+	public void assessSize() {
+		this.size = 0;
+		boolean enteredWhile = false;
+		Stack<Node> sizeStack = new Stack<Node>();
+		Node sizeCursor = this.root != null ? this.root : null;
+		while((sizeCursor.hasLeftSon() && sizeCursor.hasRightSon()) || (sizeCursor.hasLeftSon()) || (sizeCursor.hasRightSon()) || (!sizeStack.isEmpty())) {
+			if (!enteredWhile) enteredWhile = true;
+			this.size += 1;
+			if (sizeCursor.hasLeftSon() && sizeCursor.hasRightSon()) {
+				sizeStack.push(sizeCursor.getRightSon());
+				sizeCursor = sizeCursor.getLeftSon();
+			} else if (sizeCursor.hasLeftSon()) {
+				sizeCursor = sizeCursor.getLeftSon();
+			} else if (sizeCursor.hasRightSon()) {
+				sizeCursor = sizeCursor.getRightSon();
+			} else if (!sizeStack.isEmpty()) {
+				sizeCursor = sizeStack.pop();
+			}
+		}
+		if (!sizeCursor.equals(this.root)) {
+			this.size += 1;
+		} else if (!enteredWhile) {
+			this.size = 1;
+		} else if (this.root.equals(null)) {
+			this.size = 0;
+		}
 	}
 
 	//Returns tree hashcode
@@ -542,17 +568,21 @@ public class BinaryTree implements Iterable {
 
 	//Removes everything that descends from the cursor, including the node to which the cursor refers, then relocates the cursor to the root node, returning true iff something (including the cursor) changed
 	public boolean pruneFromCursor() {
-		Node cutoff = new Node(this.cursor);
-		this.cursor = this.cursor.getFather();
-		cutoff.setFather(null);
-		if (this.cursor.getLeftSon().getFather() == null) {
-			this.cursor.setLeftSon(null);
-		} else if (this.cursor.getRightSon().getFather() == null) {
-			this.cursor.setRightSon(null);
+		if (this.cursor.equals(this.root)) {
+			this.root = null;
+			this.size = 0;
+			return true;
 		}
-		this.cursor = this.root;
-		PreOrderIterator pO = (PreOrderIterator) new PreOrderIterator(this);
-		this.size = pO.toArray().length;
+		Node cutoff = this.cursor;
+		this.cursor = this.cursor.getFather();
+		if (this.cursor.hasLeftSon() && this.cursor.getLeftSon().equals(cutoff)) {
+			this.cursor.removeLeftSon();
+		} else if (this.cursor.hasRightSon() && this.cursor.getRightSon().equals(cutoff)) {
+			this.cursor.removeRightSon();
+		}
+
+		this.cursor = this.root != null ? this.root : null;
+		this.assessSize();
 		return true;
 	}
 }
