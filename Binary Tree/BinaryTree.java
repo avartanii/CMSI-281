@@ -139,9 +139,6 @@ public class BinaryTree implements Iterable {
 				return false;
 			}
 			Node n = (Node) obj;
-			/*if (!this.obj.equals(n.getObj())) {
-				return false;
-			}*/
 			if (this.hasLeftSon() && n.hasLeftSon() && this.hasRightSon() && n.hasRightSon() && this.hasFather() && n.hasFather()) {
 				return true;
 			} else if (this.hasLeftSon() && n.hasLeftSon() && this.hasRightSon() && n.hasRightSon() && !this.hasFather() && !n.hasFather()) {
