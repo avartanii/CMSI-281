@@ -8,3 +8,5 @@ LinkedDeque: 17/35
 
 Binary Tree: 31.5/45
  * Late I think.
+
+WordFrequencies: 35/35
